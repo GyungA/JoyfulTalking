@@ -12,16 +12,32 @@ int main()
 	auto ObjectX = 700, ObjectY = 440;
 	ObjectPtr bubble = Object::create("Images/말풍선.png", scene, ObjectX-100, ObjectY-140, false);
 	bubble->setScale(0.4f);
+
 	ObjectPtr chicken = Object::create("Images/치킨.png", scene, ObjectX, ObjectY, false);
 	chicken->setScale(0.2f);
+	ObjectPtr chicken_p = Object::create("Images/치킨.png", scene, ObjectX, ObjectY, false);
+	chicken_p->setScale(0.2f);
+
 	ObjectPtr dog = Object::create("Images/강아지.png", scene, ObjectX-100, ObjectY-100, false);
 	dog->setScale(0.4f);
+	ObjectPtr dog_p = Object::create("Images/강아지.png", scene, ObjectX - 100, ObjectY - 100, false);
+	dog_p->setScale(0.4f);
+
 	ObjectPtr rice = Object::create("Images/밥.png", scene, ObjectX, ObjectY, false);
 	rice->setScale(0.4f);
+	ObjectPtr rice_p = Object::create("Images/밥.png", scene, ObjectX, ObjectY, false);
+	rice_p->setScale(0.4f);
+
 	ObjectPtr love = Object::create("Images/사랑.png", scene, ObjectX, ObjectY, false);
 	love->setScale(0.4f);
+	ObjectPtr love_p = Object::create("Images/사랑.png", scene, ObjectX, ObjectY, false);
+	love_p->setScale(0.4f);
+
 	ObjectPtr spoon = Object::create("Images/숟가락.png", scene, ObjectX, ObjectY, false);
 	spoon->setScale(0.4f);
+	ObjectPtr spoon_p = Object::create("Images/숟가락.png", scene, ObjectX, ObjectY, false);
+	spoon_p->setScale(0.4f);
+
 
 	ObjectPtr baby = Object::create("Images/아기.png", scene, 370, 140);
 
@@ -41,7 +57,7 @@ int main()
 		startButton->hide();
 		endButton->hide();
 		bubble->show();
-		dog->show();
+		chicken->show();
 
 		showMessage("'치킨'이라고 말해보자! *알맞은 그림이 뜰 때 아기를 클릭하세요");
 		timer1->start();
@@ -54,8 +70,8 @@ int main()
 		spoon->hide();
 		chicken->show();
 
-		spoon->drop();
-		chicken->pick();
+		spoon_p->drop();
+		chicken_p->pick();
 
 		timer1->start();
 
@@ -65,8 +81,8 @@ int main()
 		chicken->hide();
 		dog->show();
 
-		chicken->drop();
-		dog->pick();
+		chicken_p->drop();
+		dog_p->pick();
 
 		timer2->start();
 
