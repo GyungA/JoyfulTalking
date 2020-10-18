@@ -7,6 +7,7 @@ int main()
 	setGameOption(GameOption::GAME_OPTION_MESSAGE_BOX_BUTTON, false);
 	
 	SoundPtr sound = Sound::create("Sounds/There Are Chirping Birdies In My Soul - Reed Mathis.mp3");
+	SoundPtr taDa = Sound::create("Sounds/Ta Da.mp3");
 	sound->play(true);
 
 	ScenePtr scene = Scene::create("방", "Images/방.png");
@@ -51,6 +52,7 @@ int main()
 	auto endButton = Object::create("Images/end.png", scene, 590, 20, false);
 	auto playButton = Object::create("Images/play.png", scene, 590, 20, false);
 	auto offButton = Object::create("Images/off.png", scene, 590, 20, false);
+	auto restartButton = Object::create("Images/off.png", scene, 590, 20, false);
 
 	auto score0 = Object::create("Images/말풍선0.png", scene, 590, 160, false);
 	auto score1 = Object::create("Images/말풍선1.png", scene, 590, 160, false);
@@ -65,13 +67,16 @@ int main()
 	score4->setScale(0.7f);
 	score5->setScale(0.7f);
 
+
 	//게임 시작 버튼을 누르면 지시어가 뜨고 타이머가 실행된다.
-	auto time = 0.5f;
+	auto time = 0.4f;
 	auto timer1 = Timer::create(time);
 	auto timer2 = Timer::create(time);
 	auto timer3 = Timer::create(time);
 	auto timer4 = Timer::create(time);
 	auto timer5 = Timer::create(time);
+	auto backTimer = Timer::create(30.f);
+	auto niceTimer = Timer::create(1.f);
 
 	auto round = 1;  //첫번째 판
 	auto correct = 0;
@@ -84,7 +89,8 @@ int main()
 		answer = chicken;
 
 		timer1->start();
-
+		backTimer->start();
+		showTimer(backTimer);
 
 		return true;
 		});
@@ -167,12 +173,12 @@ int main()
 
 	baby->setOnMouseCallback([&](ObjectPtr object, int x, int y, MouseAction action)->bool {
 
-		if (problem == answer) {
+		if (round <7 && problem == answer) {
 			showMessage("성공!");
 			correct++;
 
 		}
-		else {
+		else if (round < 7 && problem != answer) {
 			showMessage("실패!");
 
 
@@ -185,7 +191,7 @@ int main()
 		timer4->stop();
 		timer5->stop();
 		if (round < 6) playButton->show();
-		if (round == 6) endButton->show();
+		if (round == 6) {endButton->show(); backTimer->stop();}
 
 		return true;
 		});
@@ -227,18 +233,38 @@ int main()
 		return true;
 		});
 
+	backTimer->setOnTimerCallback([&](TimerPtr) -> bool {
+		showMessage("앗, 시간 내에 말을 가르치지 못했어요!");
+		sound->stop();
+		restartButton->show();
+		return true;
+		});
+
 	endButton->setOnMouseCallback([&](ObjectPtr object, int x, int y, MouseAction action)->bool {
 		endButton->hide();
 		bubble->hide();
 		sound->stop();
 		offButton->show();
 
+		
 		if (correct == 0) score0->show();
 		if (correct == 1) score1->show();
 		if (correct == 2) score2->show();
 		if (correct == 3) score3->show();
 		if (correct == 4) score4->show();
-		if (correct == 5) score5->show();
+		if (correct == 5) {
+			score5->show(); niceTimer->start(); taDa->play(true);
+		niceTimer->setOnTimerCallback([&](TimerPtr) -> bool {
+			taDa->stop();
+			return true;
+			});
+		}
+
+		return true;
+		});
+
+	restartButton->setOnMouseCallback([&](ObjectPtr object, int x, int y, MouseAction action)->bool {
+		startGame(scene);
 
 		return true;
 		});
