@@ -3,7 +3,7 @@ using namespace bangtal;
 
 int main()
 {
-	setGameOption(GameOption::GAME_OPTION_INVENTORY_BUTTON, true);
+	setGameOption(GameOption::GAME_OPTION_INVENTORY_BUTTON, false);
 	setGameOption(GameOption::GAME_OPTION_MESSAGE_BOX_BUTTON, false);
 
 	ScenePtr scene = Scene::create("방", "Images/방.png");
@@ -18,17 +18,17 @@ int main()
 	ObjectPtr chicken_p = Object::create("Images/치킨.png", scene, ObjectX+1000, ObjectY, false);
 	chicken_p->setScale(0.2f);
 
-	ObjectPtr dog = Object::create("Images/강아지.png", scene, ObjectX, ObjectY, false);
+	ObjectPtr dog = Object::create("Images/강아지.png", scene, ObjectX, ObjectY-10, false);
 	dog->setScale(0.2f);
 	ObjectPtr dog_p = Object::create("Images/강아지.png", scene, ObjectX + 1000, ObjectY + 1000, false);
 	dog_p->setScale(0.2f);
 
 	ObjectPtr rice = Object::create("Images/밥.png", scene, ObjectX, ObjectY, false);
-	rice->setScale(0.1f);
+	rice->setScale(0.05f);
 	ObjectPtr rice_p = Object::create("Images/밥.png", scene, ObjectX + 1000, ObjectY + 1000, false);
-	rice_p->setScale(0.1f);
+	rice_p->setScale(0.05f);
 
-	ObjectPtr love = Object::create("Images/사랑.png", scene, ObjectX, ObjectY, false);
+	ObjectPtr love = Object::create("Images/사랑.png", scene, ObjectX, ObjectY-20, false);
 	love->setScale(0.2f);
 	ObjectPtr love_p = Object::create("Images/사랑.png", scene, ObjectX + 1000, ObjectY + 1000, false);
 	love_p->setScale(0.2f);
@@ -47,22 +47,28 @@ int main()
 	auto startButton = Object::create("Images/start.png", scene, 590, 70);
 	auto endButton = Object::create("Images/end.png", scene, 590, 20, false);
 	auto playButton = Object::create("Images/play.png", scene, 590, 20, false);
+	auto offButton = Object::create("Images/off.png", scene, 590, 20, false);
 
-	auto score0 = Object::create("Images/말풍선0.png", scene, 590, 140, false);
-	auto score1 = Object::create("Images/말풍선1.png", scene, 590, 140, false);
-	auto score2 = Object::create("Images/말풍선2.png", scene, 590, 140, false);
-	auto score3 = Object::create("Images/말풍선3.png", scene, 590, 140, false);
-	auto score4 = Object::create("Images/말풍선4.png", scene, 590, 140, false);
-	auto score5 = Object::create("Images/말풍선5.png", scene, 590, 140, false);
+	auto score0 = Object::create("Images/말풍선0.png", scene, 590, 160, false);
+	auto score1 = Object::create("Images/말풍선1.png", scene, 590, 160, false);
+	auto score2 = Object::create("Images/말풍선2.png", scene, 590, 160, false);
+	auto score3 = Object::create("Images/말풍선3.png", scene, 590, 160, false);
+	auto score4 = Object::create("Images/말풍선4.png", scene, 590, 160, false);
+	auto score5 = Object::create("Images/말풍선5.png", scene, 590, 160, false);
+	score0->setScale(0.7f);
+	score1->setScale(0.7f);
+	score2->setScale(0.7f);
+	score3->setScale(0.7f);
+	score4->setScale(0.7f);
+	score5->setScale(0.7f);
 
 	//게임 시작 버튼을 누르면 지시어가 뜨고 타이머가 실행된다.
-	auto time = 1.f;
+	auto time = 0.5f;
 	auto timer1 = Timer::create(time);
 	auto timer2 = Timer::create(time);
 	auto timer3 = Timer::create(time);
 	auto timer4 = Timer::create(time);
 	auto timer5 = Timer::create(time);
-	showTimer(timer1);
 
 	auto round = 1;  //첫번째 판
 	auto correct = 0;
@@ -220,12 +226,20 @@ int main()
 
 	endButton->setOnMouseCallback([&](ObjectPtr object, int x, int y, MouseAction action)->bool {
 		endButton->hide();
-		if (correct = 0) score0->show();
-		if (correct = 1) score1->show();
-		if (correct = 2) score2->show();
-		if (correct = 3) score3->show();
-		if (correct = 4) score4->show();
-		if (correct = 5) score5->show();
+		bubble->hide();
+		offButton->show();
+		if (correct == 0) score0->show();
+		if (correct == 1) score1->show();
+		if (correct == 2) score2->show();
+		if (correct == 3) score3->show();
+		if (correct == 4) score4->show();
+		if (correct == 5) score5->show();
+
+		return true;
+		});
+
+	endButton->setOnMouseCallback([&](ObjectPtr object, int x, int y, MouseAction action)->bool {
+		endGame();
 
 		return true;
 		});
