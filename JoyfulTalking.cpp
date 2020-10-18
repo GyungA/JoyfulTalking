@@ -3,10 +3,17 @@ using namespace bangtal;
 
 int main()
 {
+	setGameOption(GameOption::GAME_OPTION_INVENTORY_BUTTON, false);
+	setGameOption(GameOption::GAME_OPTION_MESSAGE_BOX_BUTTON, false);
+
 	ScenePtr scene = Scene::create("방", "Images/방.png");
 
-
-	ObjectPtr dog = Object::create("강아지", "Images/강아지.png", scene, 800, 270, true);
+	auto ObjectX = 800, ObjectY = 270;
+	ObjectPtr dog = Object::create("Images/강아지.png", scene, ObjectX, ObjectY, false);
+	ObjectPtr rice = Object::create("Images/밥.png", scene, ObjectX, ObjectY, false);
+	ObjectPtr love = Object::create("Images/사랑.png", scene, ObjectX, ObjectY, false);
+	ObjectPtr spoon = Object::create("Images/숟가락.png", scene, ObjectX, ObjectY, false);
+	ObjectPtr chicken = Object::create("Images/치킨.png", scene, ObjectX, ObjectY, false);
 
 
 	// 지시어가 뜬다
@@ -18,6 +25,17 @@ int main()
 
 		return true;
 		});
+
+	auto timer1 = Timer::create(0.1f);
+	timer1->setOnTimerCallback([&](TimerPtr timer) -> bool {
+		scene->setLight((rand() % 100) / 100.f);
+		timer1->set(0.1f);
+		timer1->start();
+		
+		return true;
+	});
+	timer1->start();
+
 
 	showMessage("'강아지'라고 말해보자! *알맞은 그림이 뜰 때 클릭하세요");
 
@@ -36,10 +54,8 @@ int main()
 		return true;
 		});
 
-	void endGame();
 
-
-	void startGame(ScenePtr scene);
+	startGame(scene);
 
 	return 0;
 }
