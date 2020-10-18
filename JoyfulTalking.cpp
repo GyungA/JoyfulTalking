@@ -238,7 +238,7 @@ int main()
 		return true;
 		});
 
-	endButton->setOnMouseCallback([&](ObjectPtr object, int x, int y, MouseAction action)->bool {
+	offButton->setOnMouseCallback([&](ObjectPtr object, int x, int y, MouseAction action)->bool {
 		endGame();
 
 		return true;
