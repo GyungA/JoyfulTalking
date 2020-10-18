@@ -62,7 +62,7 @@ int main()
 	auto score5 = Object::create("Images/말풍선5.png", scene, 590, 160, false);
 	score0->setScale(0.7f);
 	score1->setScale(0.7f);
-	score2->setScale(0.7f);
+	score2->setScale(0.7f);	
 	score3->setScale(0.7f);
 	score4->setScale(0.7f);
 	score5->setScale(0.7f);
@@ -80,6 +80,7 @@ int main()
 
 	auto round = 1;  //첫번째 판
 	auto correct = 0;
+	auto click = false;
 	startButton->setOnMouseCallback([&](ObjectPtr object, int x, int y, MouseAction action)->bool {
 		startButton->hide();
 		bubble->show();
@@ -173,18 +174,20 @@ int main()
 
 	baby->setOnMouseCallback([&](ObjectPtr object, int x, int y, MouseAction action)->bool {
 
-		if (round <7 && problem == answer) {
+		if (click == false && round <7 && problem == answer) {
 			showMessage("성공!");
 			correct++;
+			round++;
 
 		}
-		else if (round < 7 && problem != answer) {
+		else if (click == false && round < 7 && problem != answer) {
 			showMessage("실패!");
+			round++;
 
 
 		}
 
-		round++;
+		click = true;
 		timer1->stop();
 		timer2->stop();
 		timer3->stop();
@@ -225,8 +228,10 @@ int main()
 		if (round == 5) {
 			problem = spoon; showMessage("마지막으로 '숟가락'이라고 말해보자!");
 		}
-		answer = chicken;
 
+		click = false;
+
+		answer = chicken;
 		timer1->start();
 
 
