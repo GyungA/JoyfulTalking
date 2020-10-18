@@ -24,9 +24,9 @@ int main()
 	dog_p->setScale(0.2f);
 
 	ObjectPtr rice = Object::create("Images/밥.png", scene, ObjectX, ObjectY, false);
-	rice->setScale(0.2f);
+	rice->setScale(0.1f);
 	ObjectPtr rice_p = Object::create("Images/밥.png", scene, ObjectX + 1000, ObjectY + 1000, false);
-	rice_p->setScale(0.2f);
+	rice_p->setScale(0.1f);
 
 	ObjectPtr love = Object::create("Images/사랑.png", scene, ObjectX, ObjectY, false);
 	love->setScale(0.2f);
@@ -48,12 +48,13 @@ int main()
 
 
 	//게임 시작 버튼을 누르면 지시어가 뜨고 타이머가 실행된다.
-	auto timer1 = Timer::create(10.f);
-	auto timer2 = Timer::create(4.f);
-	auto timer3 = Timer::create(4.f);
-	auto timer4 = Timer::create(4.f);
-	auto timer5 = Timer::create(4.f);
-	showTimer(timer2);
+	auto time = 1.f;
+	auto timer1 = Timer::create(time);
+	auto timer2 = Timer::create(time);
+	auto timer3 = Timer::create(time);
+	auto timer4 = Timer::create(time);
+	auto timer5 = Timer::create(time);
+	showTimer(timer1);
 
 	startButton->setOnMouseCallback([&](ObjectPtr object, int x, int y, MouseAction action)->bool {
 		startButton->hide();
@@ -67,87 +68,96 @@ int main()
 
 		timer1->start();
 
-		return true;
-		});
-
-	timer1->setOnTimerCallback([&](TimerPtr) -> bool {
-		chicken->hide();
-		dog->show();
-
-		chicken_p->drop();
-		dog_p->pick();
-
-		answer = dog;
-
-		timer2->start();
 
 		return true;
 		});
 
-	timer2->setOnTimerCallback([&](TimerPtr) -> bool {
-		dog->hide();
-		rice->show();
+		timer1->setOnTimerCallback([&](TimerPtr) -> bool {
+			chicken->hide();
+			dog->show();
 
-		dog_p->drop();
-		rice_p->pick();
+			chicken_p->drop();
+			dog_p->pick();
 
-		answer = rice;
+			answer = dog;
 
-		timer3->start();
+			timer5->set(time);
+			timer2->start();
 
-		return true;
-		});
 
-	timer3->setOnTimerCallback([&](TimerPtr) -> bool {
-		rice->hide();
-		love->show();
+			return true;
+			});
 
-		rice_p->drop();
-		love_p->pick();
+		timer2->setOnTimerCallback([&](TimerPtr) -> bool {
+			dog->hide();
+			rice->show();
 
-		answer = love;
+			dog_p->drop();
+			rice_p->pick();
 
-		timer4->start();
+			answer = rice;
 
-		return true;
-		});
+			timer1->set(time);
+			timer3->start();
+
+			return true;
+			});
+
+		timer3->setOnTimerCallback([&](TimerPtr) -> bool {
+			rice->hide();
+			love->show();
+
+			rice_p->drop();
+			love_p->pick();
+
+			answer = love;
+
+			timer2->set(time);
+			timer4->start();
+
+			return true;
+			});
+
+		timer4->setOnTimerCallback([&](TimerPtr) -> bool {
+			love->hide();
+			spoon->show();
+
+			love_p->drop();
+			spoon_p->pick();
+
+			answer = spoon;
+
+			timer3->set(time);
+			timer5->start();
+
+			return true;
+			});
+
+		timer5->setOnTimerCallback([&](TimerPtr) -> bool {
+			spoon->hide();
+			chicken->show();
+
+			spoon_p->drop();
+			chicken_p->pick();
+
+			answer = chicken;
+
+			timer4->set(time);
+			timer1->start();
+			return true;
+			});
 	
-	timer4->setOnTimerCallback([&](TimerPtr) -> bool {
-		love->hide();
-		spoon->show();
-
-		love_p->drop();
-		spoon_p->pick();
-
-		answer = spoon;
-
-		timer5->start();
-
-		return true;
-		});
-
-	timer5->setOnTimerCallback([&](TimerPtr) -> bool {
-		spoon->hide();
-		chicken->show();
-
-		spoon_p->drop();
-		chicken_p->pick();
-
-		answer = chicken;
-
-		timer1->start();
-
-		return true;
-		});
 
 
 	baby->setOnMouseCallback([&](ObjectPtr object, int x, int y, MouseAction action)->bool {
+
 		if (problem == answer) {
 			showMessage("성공! 이번엔 '강아지'라고 말해보자!");
 
 		}
 		else {
 			showMessage("실패! 이번엔 '강아지'라고 말해보자!");
+
 
 		}
 
