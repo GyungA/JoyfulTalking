@@ -38,14 +38,22 @@ int main()
 	ObjectPtr spoon_p = Object::create("Images/숟가락.png", scene, ObjectX + 1000, ObjectY + 1000, false);
 	spoon_p->setScale(0.2f);
 
+
 	auto problem = chicken;
 	auto answer = chicken;
 
 	ObjectPtr baby = Object::create("Images/아기.png", scene, 370, 140);
 
 	auto startButton = Object::create("Images/start.png", scene, 590, 70);
-	auto endButton = Object::create("Images/end.png", scene, 590, 20);
+	auto endButton = Object::create("Images/end.png", scene, 590, 20, false);
+	auto playButton = Object::create("Images/play.png", scene, 590, 20, false);
 
+	auto score0 = Object::create("Images/말풍선0.png", scene, 590, 140, false);
+	auto score1 = Object::create("Images/말풍선1.png", scene, 590, 140, false);
+	auto score2 = Object::create("Images/말풍선2.png", scene, 590, 140, false);
+	auto score3 = Object::create("Images/말풍선3.png", scene, 590, 140, false);
+	auto score4 = Object::create("Images/말풍선4.png", scene, 590, 140, false);
+	auto score5 = Object::create("Images/말풍선5.png", scene, 590, 140, false);
 
 	//게임 시작 버튼을 누르면 지시어가 뜨고 타이머가 실행된다.
 	auto time = 1.f;
@@ -56,14 +64,14 @@ int main()
 	auto timer5 = Timer::create(time);
 	showTimer(timer1);
 
+	auto round = 1;  //첫번째 판
+	auto correct = 0;
 	startButton->setOnMouseCallback([&](ObjectPtr object, int x, int y, MouseAction action)->bool {
 		startButton->hide();
-		endButton->hide();
 		bubble->show();
-		chicken->show();
-		chicken_p->pick();
 
 		showMessage("'치킨'이라고 말해보자! *알맞은 그림이 뜰 때 아기를 클릭하세요");
+
 		answer = chicken;
 
 		timer1->start();
@@ -148,24 +156,76 @@ int main()
 			});
 	
 
-
 	baby->setOnMouseCallback([&](ObjectPtr object, int x, int y, MouseAction action)->bool {
 
 		if (problem == answer) {
-			showMessage("성공! 이번엔 '강아지'라고 말해보자!");
+			showMessage("성공!");
+			correct++;
 
 		}
 		else {
-			showMessage("실패! 이번엔 '강아지'라고 말해보자!");
+			showMessage("실패!");
 
 
 		}
+
+		round++;
+		timer1->stop();
+		timer2->stop();
+		timer3->stop();
+		timer4->stop();
+		timer5->stop();
+		if (round < 6) playButton->show();
+		if (round == 6) endButton->show();
 
 		return true;
 		});
 		
+	playButton->setOnMouseCallback([&](ObjectPtr object, int x, int y, MouseAction action)->bool {
+		playButton->hide();
+		chicken->hide();
+		chicken_p->drop();
+
+		dog->hide();
+		dog_p->drop();
+
+		rice->hide();
+		rice_p->drop();
+
+		love->hide();
+		love_p->drop();
+
+		spoon->hide();
+		spoon_p->drop();
+
+		if (round == 2) {
+			problem = dog;  showMessage("이번에는 '강아지'라고 말해보자!");
+		}
+		if (round == 3) {
+			problem = rice; showMessage("'밥'이라고 말해보자!");
+		}
+		if (round == 4) {
+			problem = love; showMessage("'사랑'이라고 말해보자!");
+		}
+		if (round == 5) {
+			problem = spoon; showMessage("마지막으로 '숟가락'이라고 말해보자!");
+		}
+		answer = chicken;
+
+		timer1->start();
+
+
+		return true;
+		});
+
 	endButton->setOnMouseCallback([&](ObjectPtr object, int x, int y, MouseAction action)->bool {
-		endGame();
+		endButton->hide();
+		if (correct = 0) score0->show();
+		if (correct = 1) score1->show();
+		if (correct = 2) score2->show();
+		if (correct = 3) score3->show();
+		if (correct = 4) score4->show();
+		if (correct = 5) score5->show();
 
 		return true;
 		});
