@@ -5,6 +5,9 @@ int main()
 {
 	setGameOption(GameOption::GAME_OPTION_INVENTORY_BUTTON, false);
 	setGameOption(GameOption::GAME_OPTION_MESSAGE_BOX_BUTTON, false);
+	
+	SoundPtr sound = Sound::create("Sounds/There Are Chirping Birdies In My Soul - Reed Mathis.mp3");
+	sound->play(true);
 
 	ScenePtr scene = Scene::create("방", "Images/방.png");
 
@@ -227,7 +230,9 @@ int main()
 	endButton->setOnMouseCallback([&](ObjectPtr object, int x, int y, MouseAction action)->bool {
 		endButton->hide();
 		bubble->hide();
+		sound->stop();
 		offButton->show();
+
 		if (correct == 0) score0->show();
 		if (correct == 1) score1->show();
 		if (correct == 2) score2->show();
