@@ -8,7 +8,6 @@ int main()
 	
 	SoundPtr sound = Sound::create("Sounds/There Are Chirping Birdies In My Soul - Reed Mathis.mp3");
 	SoundPtr taDa = Sound::create("Sounds/Ta Da.mp3");
-	sound->play(true);
 
 	ScenePtr scene = Scene::create("방", "Images/방.png");
 
@@ -52,7 +51,6 @@ int main()
 	auto endButton = Object::create("Images/end.png", scene, 590, 20, false);
 	auto playButton = Object::create("Images/play.png", scene, 590, 20, false);
 	auto offButton = Object::create("Images/off.png", scene, 590, 20, false);
-	auto restartButton = Object::create("Images/off.png", scene, 590, 20, false);
 
 	auto score0 = Object::create("Images/말풍선0.png", scene, 590, 160, false);
 	auto score1 = Object::create("Images/말풍선1.png", scene, 590, 160, false);
@@ -70,28 +68,47 @@ int main()
 
 	//게임 시작 버튼을 누르면 지시어가 뜨고 타이머가 실행된다.
 	auto time = 0.4f;
+	auto runTime = 10.f;
 	auto timer1 = Timer::create(time);
 	auto timer2 = Timer::create(time);
 	auto timer3 = Timer::create(time);
 	auto timer4 = Timer::create(time);
 	auto timer5 = Timer::create(time);
-	auto backTimer = Timer::create(30.f);
+	auto backTimer = Timer::create(runTime);
 	auto niceTimer = Timer::create(1.f);
 
 	auto round = 1;  //첫번째 판
 	auto correct = 0;
-	auto click = false;
+	auto clickToNext = false;
+	auto fail = false;
+
 	startButton->setOnMouseCallback([&](ObjectPtr object, int x, int y, MouseAction action)->bool {
+		sound->play(true);
 		startButton->hide();
+		offButton->hide();
 		bubble->show();
+
+		score0->hide();
+		score1->hide();
+		score2->hide();
+		score3->hide();
+		score4->hide();
+		score5->hide();
+
+		round = 1;  //첫번째 판
+		correct = 0;
+		clickToNext = false;
+		fail = false;
 
 		showMessage("'치킨'이라고 말해보자! *알맞은 그림이 뜰 때 아기를 클릭하세요");
 
 		answer = chicken;
 
 		timer1->start();
+		backTimer->set(runTime);
 		backTimer->start();
 		showTimer(backTimer);
+		clickToNext = true;
 
 		return true;
 		});
@@ -174,27 +191,27 @@ int main()
 
 	baby->setOnMouseCallback([&](ObjectPtr object, int x, int y, MouseAction action)->bool {
 
-		if (click == false && round <7 && problem == answer) {
+		if (clickToNext == true && round <7 && problem == answer) {
 			showMessage("성공!");
 			correct++;
 			round++;
-
+			clickToNext = false;
 		}
-		else if (click == false && round < 7 && problem != answer) {
+		else if (clickToNext == true && round < 7 && problem != answer) {
 			showMessage("실패!");
 			round++;
+			clickToNext = false;
+
+		}	
 
 
-		}
-
-		click = true;
 		timer1->stop();
 		timer2->stop();
 		timer3->stop();
 		timer4->stop();
 		timer5->stop();
-		if (round < 6) playButton->show();
-		if (round == 6) {endButton->show(); backTimer->stop();}
+		if (fail == false && clickToNext == false && round < 6) playButton->show();
+		if (fail == false && clickToNext == false && round == 6) {endButton->show(); backTimer->stop();}
 
 		return true;
 		});
@@ -229,7 +246,7 @@ int main()
 			problem = spoon; showMessage("마지막으로 '숟가락'이라고 말해보자!");
 		}
 
-		click = false;
+		clickToNext = true;
 
 		answer = chicken;
 		timer1->start();
@@ -241,7 +258,18 @@ int main()
 	backTimer->setOnTimerCallback([&](TimerPtr) -> bool {
 		showMessage("앗, 시간 내에 말을 가르치지 못했어요!");
 		sound->stop();
-		restartButton->show();
+		startButton->setImage("Images/restart.png");
+		startButton->show();
+		offButton->show();
+
+		clickToNext = false;
+		fail = true;
+
+		timer1->stop();
+		timer2->stop();
+		timer3->stop();
+		timer4->stop();
+		timer5->stop();
 		return true;
 		});
 
@@ -268,11 +296,6 @@ int main()
 		return true;
 		});
 
-	restartButton->setOnMouseCallback([&](ObjectPtr object, int x, int y, MouseAction action)->bool {
-		startGame(scene);
-
-		return true;
-		});
 
 	offButton->setOnMouseCallback([&](ObjectPtr object, int x, int y, MouseAction action)->bool {
 		endGame();
