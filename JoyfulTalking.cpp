@@ -48,9 +48,9 @@ int main()
 	ObjectPtr baby = Object::create("Images/아기.png", scene, 370, 140);
 
 	auto startButton = Object::create("Images/start.png", scene, 590, 70);
-	auto endButton = Object::create("Images/end.png", scene, 590, 20, false);
+	auto endButton = Object::create("Images/result.png", scene, 590, 20, false);
 	auto playButton = Object::create("Images/play.png", scene, 590, 20, false);
-	auto offButton = Object::create("Images/off.png", scene, 590, 20, false);
+	auto offButton = Object::create("Images/end.png", scene, 590, 20, false);
 
 	auto score0 = Object::create("Images/말풍선0.png", scene, 590, 160, false);
 	auto score1 = Object::create("Images/말풍선1.png", scene, 590, 160, false);
@@ -278,6 +278,8 @@ int main()
 		bubble->hide();
 		sound->stop();
 		offButton->show();
+		startButton->setImage("Images/restart.png");
+		startButton->show();
 
 		
 		if (correct == 0) score0->show();
