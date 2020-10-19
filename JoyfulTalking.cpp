@@ -68,7 +68,7 @@ int main()
 
 	//게임 시작 버튼을 누르면 지시어가 뜨고 타이머가 실행된다.
 	auto time = 0.4f;
-	auto runTime = 10.f;
+	auto runTime = 30.f;
 	auto timer1 = Timer::create(time);
 	auto timer2 = Timer::create(time);
 	auto timer3 = Timer::create(time);
