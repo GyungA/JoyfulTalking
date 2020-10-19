@@ -52,6 +52,7 @@ int main()
 	auto playButton = Object::create("Images/play.png", scene, 590, 20, false);
 	auto offButton = Object::create("Images/end.png", scene, 590, 20, false);
 
+	//점수에 따라 달라지는 말풍선 배정
 	auto score0 = Object::create("Images/말풍선0.png", scene, 590, 160, false);
 	auto score1 = Object::create("Images/말풍선1.png", scene, 590, 160, false);
 	auto score2 = Object::create("Images/말풍선2.png", scene, 590, 160, false);
@@ -66,7 +67,7 @@ int main()
 	score5->setScale(0.7f);
 
 
-	//게임 시작 버튼을 누르면 지시어가 뜨고 타이머가 실행된다.
+	//게임 시작 버튼을 누르면 지시어가 뜨고 타이머가 실행된다. 재시작하는 경우도 고려하여 모든 값들 초기화.
 	auto time = 0.4f;
 	auto runTime = 30.f;
 	auto timer1 = Timer::create(time);
@@ -77,7 +78,7 @@ int main()
 	auto backTimer = Timer::create(runTime);
 	auto niceTimer = Timer::create(1.f);
 
-	auto round = 1;  //첫번째 판
+	auto round = 1;
 	auto correct = 0;
 	auto clickToNext = false;
 	auto fail = false;
@@ -113,6 +114,7 @@ int main()
 		return true;
 		});
 
+	// 다섯 가지 그림이 time 간격으로 바뀜
 		timer1->setOnTimerCallback([&](TimerPtr) -> bool {
 			chicken->hide();
 			dog->show();
@@ -189,6 +191,7 @@ int main()
 			});
 	
 
+	//아기를 클릭하면 정답 여부를 알려주고 정답 개수 카운트
 	baby->setOnMouseCallback([&](ObjectPtr object, int x, int y, MouseAction action)->bool {
 
 		if (clickToNext == true && round <7 && problem == answer) {
@@ -216,6 +219,7 @@ int main()
 		return true;
 		});
 		
+	//다섯 가지 문제를 진행해주는 버튼
 	playButton->setOnMouseCallback([&](ObjectPtr object, int x, int y, MouseAction action)->bool {
 		playButton->hide();
 		chicken->hide();
@@ -255,6 +259,7 @@ int main()
 		return true;
 		});
 
+	//타이머 종료 시 실패
 	backTimer->setOnTimerCallback([&](TimerPtr) -> bool {
 		showMessage("앗, 시간 내에 말을 가르치지 못했어요!");
 		sound->stop();
@@ -273,6 +278,7 @@ int main()
 		return true;
 		});
 
+	//endButton은 현재 RESULT의 기능. 점수를 확인하고 다시 시작할 수 있다.
 	endButton->setOnMouseCallback([&](ObjectPtr object, int x, int y, MouseAction action)->bool {
 		endButton->hide();
 		bubble->hide();
@@ -281,7 +287,7 @@ int main()
 		startButton->setImage("Images/restart.png");
 		startButton->show();
 
-		
+		//점수에 따라 다른 말풍선이 나타난다.
 		if (correct == 0) score0->show();
 		if (correct == 1) score1->show();
 		if (correct == 2) score2->show();
