@@ -68,7 +68,7 @@ int main()
 
 
 	//게임 시작 버튼을 누르면 지시어가 뜨고 타이머가 실행된다. 재시작하는 경우도 고려하여 모든 값들 초기화.
-	auto time = 0.4f;
+	auto time = 0.5f;
 	auto runTime = 30.f;
 	auto timer1 = Timer::create(time);
 	auto timer2 = Timer::create(time);
